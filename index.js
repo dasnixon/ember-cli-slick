@@ -3,7 +3,7 @@
 const path = require('path');
 const map = require('broccoli-stew').map;
 const Funnel = require('broccoli-funnel');
-const mergeTrees = require('broccoli-merge-trees');
+const MergeTrees = require('broccoli-merge-trees');
 
 module.exports = {
   name: 'ember-cli-slick',
