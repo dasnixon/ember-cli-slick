@@ -13,15 +13,18 @@ module.exports = {
   },
 
   treeForVendor(defaultTree) {
-    var browserVendorLib = new Funnel('bower_components/slick-carousel/');
+    let scPath = path.join(this.project.root, 'bower_components', 'slick-carousel', 'slick');
+    let browserVendorLib = new Funnel(scPath);
 
     browserVendorLib = map(browserVendorLib, (content) => `if (typeof FastBoot === 'undefined') { ${content} }`);
 
-    if (defaultTree) {
-      return new mergeTrees([defaultTree, browserVendorLib]);
-    } else {
-      return browserVendorLib;
+    if (defaultTree !== undefined) {
+      trees.push(defaultTree);
     }
+
+    trees.push(browserVendorLib);
+
+    return new MergeTrees(trees);
   },
 
   included(app) {
