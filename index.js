@@ -15,7 +15,12 @@ module.exports = {
   treeForVendor(defaultTree) {
     let trees = [];
     let scPath = path.join(this.project.root, 'bower_components', 'slick-carousel', 'slick');
-    let browserVendorLib = new Funnel(scPath);
+    let browserVendorLib = new Funnel(scPath, {
+      include: [
+        'slick/**/*',
+        'ajax-loader.gif'
+      ]
+    });
 
     browserVendorLib = map(browserVendorLib, (content) => `if (typeof FastBoot === 'undefined') { ${content} }`);
 
