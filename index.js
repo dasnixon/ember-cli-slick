@@ -1,15 +1,30 @@
 /* jshint node: true */
 'use strict';
-var path = require('path');
+const path = require('path');
+const map = require('broccoli-stew').map;
+const Funnel = require('broccoli-funnel');
+const mergeTrees = require('broccoli-merge-trees');
 
 module.exports = {
   name: 'ember-cli-slick',
 
-  blueprintsPath: function() {
+  blueprintsPath() {
     return path.join(__dirname, 'blueprints');
   },
 
-  included: function(app) {
+  treeForVendor(defaultTree) {
+    var browserVendorLib = new Funnel('bower_components/slick-carousel/');
+
+    browserVendorLib = map(browserVendorLib, (content) => `if (typeof FastBoot === 'undefined') { ${content} }`);
+
+    if (defaultTree) {
+      return new mergeTrees([defaultTree, browserVendorLib]);
+    } else {
+      return browserVendorLib;
+    }
+  },
+
+  included(app) {
     this._super.included(app);
     this.app.import(app.bowerDirectory + '/slick-carousel/slick/slick.css');
     this.app.import(app.bowerDirectory + '/slick-carousel/slick/slick.js');
